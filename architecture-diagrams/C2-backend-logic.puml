@@ -1,0 +1,50 @@
+@startuml Backend Logic
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+AddElementTag("backendContainer", $fontColor=$ELEMENT_FONT_COLOR, $bgColor="#335DA5", $shape=EightSidedShape(), $legendText="backend container\neight sided")
+AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DottedLine())
+
+title Container diagram for Backend Logic
+
+Person(users, Users, "Club Members who organize monthly reading challenges")
+Person(admin, Admin, "Administrator of the system")
+
+System_Boundary(c1, "Backend Logic") {
+   Container(user_profile, "User Profile Service", "Python", "Allows to edit user profile and manage saved books")
+   Container(security_controller, "Security Controller", "Python/hashed", "Hashes user passwords and secures data")
+   Container(login_service, "Login/Register Service", "Python", "Creates new user accounts and allows them to enter app")
+   Container(book_profile, "Book Profile", "Python", "Collects information regarding a book")
+   Container(notifications, "Notification App", "Python/Telegram", "Schedules and creates notifications")
+   Container(archive, "Archive Service", "Python", "Displays previous reading cycles and statistics")
+   Container(voting, "Voting Service", "Python", "Conducts book and catetegory voting")
+   Container(cycle_menager, "Reading Cycle Menager", "Python", "Summarizes all information regarding a reading cycle, including voting results, members, deadlines etc. ")
+   Container(bookshelves, "Bookshelves Manager", "Python", "Stores and catalogues books saved by Users")
+   Container(framework, "Web Framework", "Django", "Communicator between frontend and backend.")
+   ContainerDb(database, "Database", "SQL Database", "Stores user registration information, hashed auth credentials, voting, books history, etc.")
+}
+
+Container(backend_api, "API Application", "Python, Docker Container", "Provides functionalities via API", $tags="backendContainer")
+Container(web_app, "Web Application", "JS/HTML", "Delivers the static content and the system")
+System_Ext(telegram_bot, "Telegram Bot", "A chat bot for club members to receive notifications")
+
+Rel(users, login_service, "")
+Rel(users, security_controller, "")
+Rel(login_service, user_profile, "")
+Rel(security_controller, user_profile, "")
+Rel(user_profile, database, " Saves all user related data")
+Rel(book_profile, backend_api, "Gets avg. score and overview from", $tags="sync/async")
+Rel(notifications, telegram_bot, "Requests notification", $tags="sync/async")
+Rel(telegram_bot, users, " Sends notification to")
+Rel(voting, cycle_menager, " Updates voting results")
+Rel(users, voting, "Submits votes and book category suggestions")
+Rel(admin, cycle_menager, "Responsible for monitoring")
+Rel(book_profile, bookshelves, " Can be saved in")
+Rel(cycle_menager, database, "Saves all reading cycle related data")
+Rel(web_app, framework, "")
+Rel_Neighbor(user_profile, bookshelves, "")
+Rel(cycle_menager, archive, "After completion, current cycle is reset and all data are transfered from db to archive")
+
+SHOW_LEGEND()
+@enduml
