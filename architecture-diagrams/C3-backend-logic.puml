@@ -8,7 +8,7 @@ AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $
 
 title Container diagram for Backend Logic
 
-Person(users, Users, "Club Members who organize monthly reading challenges")
+Person(users, Users, "Club Members who take part in monthly reading challenges")
 Person(admin, Admin, "Administrator of the system")
 
 System_Boundary(c1, "Backend Logic") {
@@ -18,10 +18,11 @@ System_Boundary(c1, "Backend Logic") {
    Container(book_profile, "Book Profile", "Python", "Collects information regarding a book")
    Container(notifications, "Notification App", "Python/Telegram", "Schedules and creates notifications")
    Container(archive, "Archive Service", "Python", "Displays previous reading cycles and statistics")
-   Container(voting, "Voting Service", "Python", "Conducts book and catetegory voting")
+   Container(voting, "Voting Service", "Python", "Conducts book, catetegory and availability voting")
    Container(cycle_menager, "Reading Cycle Menager", "Python", "Summarizes all information regarding a reading cycle, including voting results, members, deadlines etc. ")
    Container(bookshelves, "Bookshelves Manager", "Python", "Stores and catalogues books saved by Users")
    Container(framework, "Web Framework", "Django", "Communicator between frontend and backend.")
+   Container(scheduler, "Schedule App", "Python", "Collects information about Users availability, analizes data and proposes best meeting time to Admin")
    ContainerDb(database, "Database", "SQL Database", "Stores user registration information, hashed auth credentials, voting, books history, etc.")
 }
 
@@ -44,6 +45,8 @@ Rel(book_profile, bookshelves, " Can be saved in")
 Rel(cycle_menager, database, "Saves all reading cycle related data")
 Rel(web_app, framework, "")
 Rel_Neighbor(user_profile, bookshelves, "")
+Rel_Neighbor(cycle_menager, scheduler, "")
+Rel(admin, scheduler, "")
 Rel(cycle_menager, archive, "After completion, current cycle is reset and all data are transfered from db to archive")
 
 SHOW_LEGEND()
