@@ -1,3 +1,8 @@
 .DS_Store
 changelog.md
 db-scheme.png
+.venv
+db.sqlite3
+book_club/__pycache__
+clubs/__pycache__
+clubs/migrations/__pycache__
