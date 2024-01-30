@@ -1,3 +1,4 @@
 .DS_Store
 changelog.md
 db-scheme.png
+__pycache__/
