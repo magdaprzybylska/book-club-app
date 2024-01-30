@@ -1,0 +1,33 @@
+@startuml Book Club Hub App
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+AddElementTag("backendContainer", $fontColor=$ELEMENT_FONT_COLOR, $bgColor="#335DA5", $shape=EightSidedShape(), $legendText="backend container\neight sided")
+AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DottedLine())
+
+title Container diagram for Book Club Hub App
+
+Person(users, Users, "Club Members who organize monthly reading challenges")
+
+System_Boundary(c1, "Club Management System") {
+   Container(web_app, "Web Application", "JS/HTML", "Delivers the static content and the system")
+   ContainerDb(database, "Database", "SQL Database", "Stores user registration information, hashed auth credentials, voting, books history, etc.")
+   Container(backend_system, "Backend Logic", "Python/Django", "Processes app functionalities, e.g. voting, category input, notifications etc.", $tags="backendContainer")
+   Container(backend_api, "API Application", "Python, Docker Container", "Provides functionalities via API", $tags="backendContainer")
+}
+
+System_Ext(google_books, "Google Books", "Getting opinions about books")
+System_Ext(telegram_bot, "Telegram Bot", "A chat bot for club members to receive notifications")
+
+Rel(users, web_app, "Vote for book categories\n Add books to the system\n View voting results", "")
+Rel(web_app, backend_system, "Processes user data\n")
+Rel(web_app, backend_api, "Makes Api calls to", "Json/HTTP")
+
+Rel(backend_api, database, "Reads from and writes to", "sync, JDBC")
+Rel(backend_system, database,"", "")
+Rel_Left(backend_api, google_books, "Uses", "sync, Json/HTTPS", $tags="sync/async")
+Rel_Neighbor(backend_system, telegram_bot, "Sends notification via", "Python, Telegram", $tags="sync/async")
+
+SHOW_LEGEND()
+@enduml

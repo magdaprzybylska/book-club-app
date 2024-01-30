@@ -1,0 +1,29 @@
+@startuml API Application
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+AddElementTag("backendContainer", $fontColor=$ELEMENT_FONT_COLOR, $bgColor="#335DA5", $shape=EightSidedShape(), $legendText="backend container\neight sided")
+AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DottedLine())
+
+title Container diagram for API Application 
+
+System_Boundary(backend_api, "API Application") {
+    Container(request, "Request Service", "", "Responsible for requesting book information from Google Books")
+    Container(daily_scheduler, "Daily Scheduler", "Cron Tab/Python", "Responsible for calling requests service every day")
+    Container(db_updater, "Database Updater", "Python", "Receives JSON data from Request Service and updates db")
+}
+
+System_Ext(google_books, "Google Books", "Getting opinions about books")
+
+Container(web_app, "Web Application", "JS/HTML", "Delivers the static content and the system")
+ContainerDb(database, "Database", "SQL Database", "Stores user registration information, hashed auth credentials, voting, books history, etc.")
+
+Rel(web_app, request, " Receives request call from Web App")
+Rel(request, db_updater, " Books information is being saved in")
+Rel(db_updater, database, "")
+Rel(request, google_books, "makes API call", $tags="sync/async")
+Rel_Neighbor(daily_scheduler, request, "Triggers request call")
+
+SHOW_LEGEND()
+@enduml

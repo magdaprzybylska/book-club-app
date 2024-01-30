@@ -1,0 +1,27 @@
+@startuml Users
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+AddElementTag("backendContainer", $fontColor=$ELEMENT_FONT_COLOR, $bgColor="#335DA5", $shape=EightSidedShape(), $legendText="backend container\neight sided")
+AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DottedLine())
+
+title Container diagram for User in Book Club Management System
+
+Person(user, User, "App User who can become club member or owner")
+Person(community, Community, "a group of App Users within one club")
+
+Person(member, Member, "book club member")
+Person(admin, Admin, "Administrator of the system")
+
+System_Boundary(c1, "Club Management System") {
+}
+
+Rel(community, member, "")
+Rel(community, admin, "")
+Rel(member, c1, "Vote for book and categories\n Add books to the system\n View voting results")
+Rel(admin, c1, "Start category voting\n Manage book submissions\n Monitor system activities")
+Rel(user, community, " Joins book club or becomes new club admin/owner")
+
+SHOW_LEGEND()
+@enduml
