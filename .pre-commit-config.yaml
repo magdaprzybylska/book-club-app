@@ -26,4 +26,3 @@ repos:
     - id: bandit
       args: ["-r", "."]
       additional_dependencies: ["bandit[toml]"]
-    #   exclude: test_*.py,./venv/,./env/,./node_modules/,./cacheback/,./.env,./.venv,migrations,tests
