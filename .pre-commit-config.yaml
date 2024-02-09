@@ -25,3 +25,4 @@ repos:
     hooks:
     - id: bandit
       args: ["-r", "."]
+      additional_dependencies: ["bandit[toml]"]

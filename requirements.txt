@@ -7,4 +7,5 @@ packaging==23.2
 pathspec==0.12.1
 platformdirs==4.1.0
 pre-commit==3.6.0
+python-dotenv==1.0.1
 sqlparse==0.4.4
