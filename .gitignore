@@ -1,7 +1,8 @@
 .DS_Store
 changelog.md
 db-scheme.png
-.venv
+venv
 db.sqlite3
 __pycache__/
 .env
+IMG_0854.jpg

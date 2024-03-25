@@ -1,3 +1,9 @@
 h1 {
     color: brown;
 }
+
+.login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

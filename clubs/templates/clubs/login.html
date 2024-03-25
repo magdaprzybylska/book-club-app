@@ -1,0 +1,15 @@
+{% extends 'clubs/base.html' %}
+{% block content %}
+
+<h1>This is login page</h1>
+
+<div class="login-form">
+    <form action="" method="POST">
+    {% csrf_token %}
+        {{ form }}
+        <button type="submit">Login here</button>
+
+    </form>
+</div>
+
+{% endblock content%}
