@@ -1,4 +1,4 @@
-[tool.bandit]
+[bandit]
 exclude = tests,.venv,.git
 tests = B201,B301
 skips = B101,B601
